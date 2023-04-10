@@ -113,6 +113,23 @@ func TestGetTicketByDestination(t *testing.T) {
 	assert.Equal(t, len(ticketsByDestination), tkts)
 }
 
+func TestAverageDestination(t *testing.T) {
+	dbMock := &DbMock{
+		db:  tickets,
+		spy: false,
+		err: nil,
+	}
+
+	repo := NewRepositoryTest(dbMock)
+	service := NewService(repo)
+
+	tkts, err := service.AverageDestination(cxt, "China")
+
+	assert.Nil(t, err)
+	assert.True(t, dbMock.spy)
+	assert.Equal(t, float64(len(ticketsByDestination))/float64(len(tickets)), tkts)
+}
+
 func TestGetTotalTickets(t *testing.T) {
 
 	dbMock := &DbMock{
